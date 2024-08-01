@@ -1,0 +1,154 @@
+﻿@{
+    ViewBag.Title = "Home Page";
+}
+
+<section class="row" aria-labelledby="aspnetTitle">
+    <h1 id="title">Filter Builder</h1>
+</section>
+
+<div class="row">
+    <span>Click Load Filter to load the filter in a partial view. The unload button will remove the added elements.</span>
+</div>
+<div class="row">
+    @Ajax.ActionLink("Load Filter", "Filter", "Home", new AjaxOptions() { UpdateTargetId = "filterSection", HttpMethod = "POST", OnSuccess = "loadFilters()" }, new { @class = "btn btn-primary" })
+    <button type="button" id="unload-button" class="btn btn-secondary"><span>Unload Filter</span></button>
+</div>
+
+<div class="row mt-2">
+    <div id="filterSection" class="col-md-12">
+        <h2>Filter Section</h2>
+        <p>The filter will be displayed here when loaded from a partial view.</p>
+    </div>
+</div>
+
+
+<div id="filtersavedalert" class="alert alert-success alert-dismissible" style="display:none;" role="alert">
+    <p>Filter Saved.</p>
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+
+<script>
+
+    var expressionBuilderFunction = function (callback) {
+        alert("Hi from expression builder");
+        if (callback) {
+            // Inject the expression string in to the callback to pass it to the condition.
+            callback("Injected expression.");
+        }
+    };
+
+    var onFilterBuilderClose = function (filter) {
+
+        var options = ko.toJSON({
+            filtername: '',
+            filterdata: ko.toJSON(filter),
+        });
+
+        $.ajax({
+            url: '/filter/processfilter',
+            type: "POST",
+            contentType: 'application/json; charset=utf-8',
+            data: options,
+            success: function (whereclause) {
+                alert("After the close button was clicked, the filters get sent to the server and converted to a SQL where clause: " + whereclause);
+            },
+            error: function () {
+                alert('error saving');
+            }
+        });
+
+    };
+
+
+    var onLoadFilter = function (filtername, callback) {
+        var options = ko.toJSON({
+            filtername: filtername,
+            filterdata: '',
+        });
+        $.ajax({
+            url: '/filter/loadfilter',
+            type: "GET",
+            data: {filtername: filtername},
+            success: function (filterdata) {
+                callback(filterdata)
+            },
+            error: function () {
+                alert('error loading');
+            }
+        });
+    };
+
+    var onSaveFilter = function (filtername, filter) {
+        var options = ko.toJSON({
+            filtername: filtername,
+            filterdata: ko.toJSON(filter),
+        });
+
+        $.ajax({
+            url: '/filter/savefilter',
+            type: "POST",
+            contentType: 'application/json; charset=utf-8',
+            data: options,
+            success: function () {
+                $('#filtersavedalert').fadeIn();
+
+            },
+            error: function () {
+                alert('error saving');
+            }
+        });
+    };
+
+
+    var filterConfig = {
+        fields: [],
+        tables: [],
+        availableFilters: [],
+        module: '',
+        allowExpressionBuilder: true,
+        onShowExpressionBuilder: expressionBuilderFunction,
+        onClose: onFilterBuilderClose,
+        onLoad: onLoadFilter,
+        onSave: onSaveFilter,
+        allowPersistance: true,
+        allowAskAtRuntimeFilters: true,
+        allowFilterDescriptions: true,
+        initialFilter: ''
+    };
+
+    function showFilterBuilder() {
+        filterbuilder.show('filter-builder', filterConfig);
+    };
+
+    function destroyFilterBuilder() {
+        filterbuilder.destroy('filter-builder');
+    };
+
+    function loadFilters() {
+
+        // This demonstrates how to convert an array of strings stored in the MVC Viewbag
+        // to a javscript array that's usable from the page.
+        var array = @Html.Raw(Json.Encode(@ViewBag.AvailableFilters));
+        for(var i =0; i<array.length;i++){
+            filterConfig.availableFilters[i] = array[i];
+        }
+
+        // We can also use jquery to retrieve from the server. This works better
+        // for more complex data types like fields and tables
+        $.getJSON("/filter/filterfields/", function (fields) {
+            filterConfig.fields = fields;
+        }).done(function () {
+            $.getJSON("/filter/filtertables/", function (tables) {
+                filterConfig.tables = tables;
+            }).done(function () {
+                showFilterBuilder();
+            });
+        });
+    };
+
+    document.getElementById("unload-button")?.addEventListener("click", destroyFilterBuilder);
+</script>
+
+

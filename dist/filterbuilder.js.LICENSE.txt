@@ -1,0 +1,9 @@
+/*! Select2 4.0.13 | https://github.com/select2/select2/blob/master/LICENSE.md */
+
+/*! version : 4.17.47
+ =========================================================
+ bootstrap-datetimejs
+ https://github.com/Eonasdan/bootstrap-datetimepicker
+ Copyright (c) 2015 Jonathan Peterson
+ =========================================================
+ */
