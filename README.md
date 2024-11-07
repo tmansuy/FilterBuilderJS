@@ -86,6 +86,8 @@ $('filter-builder').show({
 	onClose: onFilterBuilderClose,
 	onLoad: onLoadFilter,
 	onSave: onSaveFilter,
+	fieldTypeaheadUrl: '',
+	fieldValuesUrl: '',
 	allowExpressions: true,
 	allowDatabaseExpressions: true,
 	allowExpressionBuilder: true,
@@ -104,12 +106,14 @@ Attribute			        | Type			                        | Default		| Description
 `tables`		            | *Array*		                        | `empty`		| An array of table objects. **required** See Index.cshtml for an example of how to populate this array in ASP.NET MVC.
 `fields`		            | *Array*		                        | `empty`		| An array of field objects. **required** See Index.cshtml for an example of how to populate this array in ASP.NET MVC.
 `initialFilter`	            | *String*		                        | `null`		| The serialized JSON of a filter to load when the control is shown.
-`module`	                | *String*		                        | `null`		| An option module name to filter the available tables.
+`module`	                | *String*		                        | `null`		| An optional module name to filter the available tables.
 `availableFilters`	        | *Array*		                        | `empty`		| An array of filter names that can be loaded to display to the user. 
 `onShowExpressionBuilder`   | *function (callback)* 		        | `null`		| Called on expression builder button click. Pass an expression string to the **callback** to populate the expression.
 `onClose`	                | *function (filter)*		            | `null`		| Called on close button click. Passed the current **filter** array.
 `onLoad`	                | *function (filtername, callback)*		| `null`		| Called on load filter button click. **filtername** contains the filter to load. Pass the loaded filter to the **callback** to populate the control.
 `onSave`	                | *function (filtername, filter)*		| `null`		| Called on save filter button click. **filtername** contains the filter name to save under. **filter** contains the filter array to save. 
+`fieldTypeaheadUrl`         | *String*								| `empty`		| The URL to call when retrieving values for the field while the user is typing.
+`fieldValuesUrl`         	| *String*								| `empty`		| The URL to call when retrieving values for the field when the values button is clicked.
 `allowAskAtRuntimeFilters`	| *Boolean*		                        | `true`		| True to allow filters to be designated as ask-at-runtime filters.
 `allowDatabaseExpressions`	| *Boolean*		                        | `true`		| True to allow database expression based filter conditions. These are SQL expressions that are injected directly in the filter. 
 `allowFilterDescriptions`   | *Boolean*		                        | `true`		| True to allow controls for customizing the filter description text.
