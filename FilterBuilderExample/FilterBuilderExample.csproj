@@ -51,8 +51,8 @@
     <Reference Include="Flee, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>packages\Flee.2.0.0\lib\netstandard2.0\Flee.dll</HintPath>
     </Reference>
-    <Reference Include="HorizonReports.Core, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>packages\HorizonReports.Core.1.0.0\lib\netstandard2.0\HorizonReports.Core.dll</HintPath>
+    <Reference Include="HorizonReports.Core, Version=1.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>packages\HorizonReports.Core.1.1.0\lib\netstandard2.0\HorizonReports.Core.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Bcl.AsyncInterfaces, Version=8.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>packages\Microsoft.Bcl.AsyncInterfaces.8.0.0\lib\net462\Microsoft.Bcl.AsyncInterfaces.dll</HintPath>
