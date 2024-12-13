@@ -60,7 +60,16 @@ namespace FilterBuilder
             var tables = SampleData.Tables.Select(x => x as IDbTable).ToList();
             List<IFilterCondition> hrfilters = FilterModel.GetFilterConditionsFromJSON(filterJSON, fields, tables);
             string sqlwhere = FilterModel.ConvertFiltersToSQLWhere(hrfilters);
-            return Json(sqlwhere);
+
+
+            // Use linq to get distinct tables in filter
+            var tablesinfilter = hrfilters.Select(x => x.Field.Table).Distinct().ToList();
+            var joins = SampleData.Joins.Select(x => x as IJoin).ToList();
+
+            // Generate a from clause for the passed in tables.
+            // This method also needs the data dictionary fields, tables, and joins collections.
+            string from = JoinFactory.GenerateFromClause(tablesinfilter, fields, tables, joins);
+            return Json("select * " + from + " " + sqlwhere);
         }
 
         [HttpGet]
